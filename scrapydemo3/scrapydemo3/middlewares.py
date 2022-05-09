@@ -3,6 +3,7 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import random
+import time
 
 from scrapy import signals
 
@@ -84,17 +85,21 @@ class Scrapydemo3DownloaderMiddleware:
 
 
     def process_request(self, request, spider):
-        print("\n")
         request.headers['User-Agent'] = UserAgent().random
-        print(f"我是请求request==========={request}")
-        print(f"我是请求request.body==========={request.body}")
-        print(f"我是请求request.headers==========={request.headers}")
-        print(f"我是请求request.url==========={request.url}")
-        print(f"我是请求request.method==========={request.method}")
+
+
+        # 注意抓取控制频率
+        # time.sleep(random.randint(1, 2))
+        print("\n")
+        # print(f"我是请求request==========={request}")
+        # print(f"我是请求request.body==========={request.body}")
+        # print(f"我是请求request.headers==========={request.headers}")
+        # print(f"我是请求request.url==========={request.url}")
+        # print(f"我是请求request.method==========={request.method}")
         if request.url.split(":")[0] == 'http':
             # request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
             request.meta['proxy'] = 'http://{}'.format('183.247.199.114:30001')
-            print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
+            # print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
 
 
         # if request.method=='GET' || request.method=='GET':
@@ -123,7 +128,7 @@ class Scrapydemo3DownloaderMiddleware:
         #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
         #     print("proxy_https_list")
         print("process_exception=============================")
-        return request
+        # return request
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
