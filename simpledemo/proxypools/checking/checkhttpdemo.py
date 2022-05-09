@@ -48,15 +48,20 @@ class IpPool:
                 MysqlConnectUtils().inserttest(sql)
 
             else:
-                sql = f"INSERT INTO housedb.ippools(ipport, httptype,soure, anonymous, downloadDate, status, updateDate, checkingCount)\
-                                                                                        VALUES('{proxy}', 'http','{self.url}' ,'不知', '{datetime.datetime.now()}', '0', '{datetime.datetime.now()}', 0) \
+                sql = f"INSERT INTO housedb.ippools(ipport, httptype, anonymous, downloadDate, status, updateDate, checkingCount)\
+                                                                                        VALUES('{proxy}', 'http' ,'不知', '{datetime.datetime.now()}', '0', '{datetime.datetime.now()}', 0) \
                                                           	on duplicate key update checkingCount = checkingCount+1,updateDate='{datetime.datetime.now()}',status='1';"
                 print(sql)
                 MysqlConnectUtils().inserttest(sql)
                 pass
 
         except Exception as e:
-            # print(proxy, '不可用')
+            sql = f"INSERT INTO housedb.ippools(ipport, httptype, anonymous, downloadDate, status, updateDate, checkingCount)\
+                                                                                           VALUES('{proxy}', 'http' ,'不知', '{datetime.datetime.now()}', '0', '{datetime.datetime.now()}', 0) \
+                                                             	on duplicate key update checkingCount = checkingCount+1,updateDate='{datetime.datetime.now()}',status='1';"
+            print(sql)
+            MysqlConnectUtils().inserttest(sql)
+            print(proxy, '不可用')
             pass
 
     def test_https_proxy(self, proxy):
