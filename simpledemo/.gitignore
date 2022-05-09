@@ -1,0 +1,18 @@
+# Default ignored files
+/shelf/
+/.idea/**
+# Datasource local storage ignored files
+/dataSources/**
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/*
+/src/test/**
+/target/**
+.idea/
+meisoo_realtime_flink.iml
+src/main/scala/com/meisoo/realtime/test/AppRealtimeSreenParkTimeCount.scala
+src/main/scala/com/meisoo/realtime/test/CheckTableCount.scala
+src/main/scala/com/meisoo/realtime/test/Demo01.scala
+target/
+flink_operation.md
+dependency-reduced-pom.xml
