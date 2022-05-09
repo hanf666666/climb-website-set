@@ -32,16 +32,19 @@ class SelfDemoSpider(scrapy.Spider):
             yield scrapy.FormRequest(url=url, formdata=data, callback=self.parse)
     def parse(self, response):
         print(f"parse response.text:{response.text}")
-        data = {"name": "韩静2",
-                "password": "123xyz",
-                }
-        yield scrapy.Request(url='http://47.95.216.113:8888/getIpAddr', callback=self.parse2)
-        # yield scrapy.FormRequest(url=self.start_urls[0], formdata=data, callback=self.parse)
+
+        headers = {
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'zh-CN,zh;q=0.9',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36',
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Connection': 'keep-alive',
+        }
+        return scrapy.Request(url='http://47.95.216.113:8888/getIpAddr', callback=self.parse2,  method='GET',
+                             headers=headers, )
     def parse2(self, response):
             print(f"parse2 response.text:{response.text}")
-            data = {"name": "韩静2",
-                    "password": "123xyz",
-                    }
-            # yield scrapy.Request(url='http://47.95.216.113:8888/getIpAddr', callback=self.parse2)
-            # yield scrapy.FormRequest(url=self.start_urls[0], formdata=data, callback=self.parse)
+
 

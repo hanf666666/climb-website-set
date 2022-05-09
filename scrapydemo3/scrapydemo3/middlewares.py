@@ -91,14 +91,19 @@ class Scrapydemo3DownloaderMiddleware:
         print(f"我是请求request.headers==========={request.headers}")
         print(f"我是请求request.url==========={request.url}")
         print(f"我是请求request.method==========={request.method}")
+        if request.url.split(":")[0] == 'http':
+            # request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+            request.meta['proxy'] = 'http://{}'.format('183.247.199.114:30001')
+            print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
 
-        if request.method=='POST':
-            if request.url.split(":")[0] == 'http':
-                request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
-                print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
-            else:
-                request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
-                print(f"我是请求request proxy_https_list===={request.meta['proxy']}")
+
+        # if request.method=='GET' || request.method=='GET':
+        #     if request.url.split(":")[0] == 'http':
+        #         request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+        #         print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
+            # else:
+            #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
+            #     print(f"我是请求request proxy_https_list===={request.meta['proxy']}")
         return None
 
     def process_response(self, request, response, spider):
@@ -111,12 +116,12 @@ class Scrapydemo3DownloaderMiddleware:
         return response
 
     def process_exception(self, request, exception, spider):
-        if request.url.split(":")[0]=='http':
-            request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
-            print("proxy_http_list")
-        else:
-            request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
-            print("proxy_https_list")
+        # if request.url.split(":")[0]=='http':
+        #     request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+        #     print("proxy_http_list")
+        # else:
+        #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
+        #     print("proxy_https_list")
         print("process_exception=============================")
         pass
 

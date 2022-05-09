@@ -22,7 +22,8 @@ from proxypools.utils.MysqlConnectUtils import MysqlConnectUtils
 class IpPool:
     def __init__(self):
         # 测试ip是否可用url
-        self.test_url = 'http://httpbin.org/get'
+        # self.test_url = 'http://httpbin.org/get'
+        self.test_url = 'http://47.95.216.113:8888/getIpAddr'
         self.headers = {'User-Agent': UserAgent().random}
         print(self.headers)
 
@@ -40,6 +41,7 @@ class IpPool:
             resp = requests.get(url=self.test_url, proxies=proxies, headers=self.headers, timeout=3)
             # 获取 状态码为200
             if resp.status_code == 200:
+                print("成功了!!!!!!")
                 print('"http://{}'.format(proxy) + '",')
                 # print(proxy, '\033[31m可用\033[0m')
                 sql = f"INSERT INTO housedb.ippools(ipport, httptype, anonymous, downloadDate, status, updateDate, checkingCount)\
