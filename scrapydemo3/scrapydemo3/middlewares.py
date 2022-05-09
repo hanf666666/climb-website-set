@@ -2,6 +2,7 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import random
 
 from scrapy import signals
 
@@ -62,12 +63,12 @@ from fake_useragent import UserAgent
 http_sql = "select ipport  from ippools i where status='0' and httptype='http' order by checkingCount desc ,updateDate desc;"
 proxy_http_dict = MysqlConnectUtils().queryAll(http_sql)
 proxy_http_list = [row['ipport'] for row in proxy_http_dict]
-print(proxy_http_list)
+print(f"proxy_http_list====>{proxy_http_list}")
 
 https_sql = "select ipport  from ippools i where status='0' and httptype='https' order by checkingCount desc ,updateDate desc;"
 proxy_https_dict = MysqlConnectUtils().queryAll(https_sql)
 proxy_https_list = [row['ipport'] for row in proxy_https_dict]
-print(proxy_https_list)
+print(f"proxy_https_list====>{proxy_https_list}")
 class Scrapydemo3DownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
@@ -113,10 +114,10 @@ class Scrapydemo3DownloaderMiddleware:
         if request.url.split(":")[0]=='http':
             request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
             print("proxy_http_list")
-        # else:
-        #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
-        #     print("proxy_https_list")
-
+        else:
+            request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
+            print("proxy_https_list")
+        print("process_exception=============================")
         pass
 
     def spider_opened(self, spider):
