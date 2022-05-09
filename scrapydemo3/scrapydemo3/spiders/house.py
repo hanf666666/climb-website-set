@@ -72,22 +72,23 @@ class HouseSpider(scrapy.Spider):
         for row in json.loads(pageDataList):
             # print(f"row===>{row}")
             projectname = row["projectname"]
-            buildingid = row["buildingid"]
             enterprisename = row["enterprisename"]
             blockname = row["blockname"]
             location = row["location"]
             getRoomJsonhttp = "http://www.cq315house.com/WebService/WebFormService.aspx/GetRoomJson"
-            getRoomJsonBody = {
-                "buildingid": buildingid
-            }
-            metaInfo={
-                'projectname': projectname,
-                'buildingid': buildingid,
-                'enterprisename': enterprisename,
-                'location': location,
-            }
-            yield scrapy.Request(url=getRoomJsonhttp, callback=self.parse_rooms, body=json.dumps(getRoomJsonBody),
-                                 method='POST', headers=self.headers, meta=metaInfo)
+            buildingids = row["buildingid"]
+            for buildingid in buildingids.split(','):
+                getRoomJsonBody = {
+                    "buildingid": buildingid
+                }
+                metaInfo={
+                    'projectname': projectname,
+                    'buildingid': buildingid,
+                    'enterprisename': enterprisename,
+                    'location': location,
+                }
+                yield scrapy.Request(url=getRoomJsonhttp, callback=self.parse_rooms, body=json.dumps(getRoomJsonBody),
+                                     method='POST', headers=self.headers, meta=metaInfo)
 
     def parse_rooms(self, response):
         """
