@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from time import sleep
 
 import scrapy
 from scrapy import Request
@@ -135,5 +136,7 @@ class HouseSpider(scrapy.Spider):
                     roomDetailsItem["use"] = room["use"]
                     roomDetailsItem["locationzi"] = room["location"]
                     roomDetailsItem["nsjg"] = room["nsjg"]
+
                     # print(f"=roomDetailsItem==>===================================={roomDetailsItem}")
+                    # sleep(10)
                     yield roomDetailsItem

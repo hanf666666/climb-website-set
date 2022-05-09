@@ -123,7 +123,7 @@ class Scrapydemo3DownloaderMiddleware:
         #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
         #     print("proxy_https_list")
         print("process_exception=============================")
-        pass
+        return request
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)

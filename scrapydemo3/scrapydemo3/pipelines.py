@@ -5,6 +5,8 @@
 
 
 # useful for handling different item types with a single interface
+from time import sleep
+
 from itemadapter import ItemAdapter
 
 from scrapydemo3.utils.MysqlConnectUtils import MysqlConnectUtils
@@ -28,6 +30,7 @@ class Scrapydemo3Pipeline:
             (projectname, buildingid, enterprisename, locationfu,fjh, downloadDate, roomstatus, `use`, locationzi, nsjg) \
             VALUES('{item['projectname']}', '{item['buildingid']}', '{item['enterprisename']}', '{item['locationfu']}', '{item['fjh']}', '{item['downloadDate']}', '{item['roomstatus']}', '{item['use']}', '{item['locationzi']}', '{item['nsjg']}'); "
             # print(sql)
+            # sleep(10)
             self.utils.inserttest(sql)
 
         return item
