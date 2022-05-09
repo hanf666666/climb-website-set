@@ -15,5 +15,9 @@ def inserttest():
 
 
 if __name__ == '__main__':
-    sql="insert into current_house value ('tSUObi15P_3bf4dU0LjR6Q','期房','大渡口区大滨中路9号14号楼1-8-4')"
-    MysqlConnectUtils().inserttest(sql)
+    # sql="insert into current_house value ('tSUObi15P_3bf4dU0LjR6Q','期房','大渡口区大滨中路9号14号楼1-8-4')"
+    # MysqlConnectUtils().inserttest(sql)
+    httpssql = "select ipport  from ippools i where status='0' and httptype='http' order by checkingCount desc ,updateDate desc;"
+    proxy_https_dict = MysqlConnectUtils().queryAll(httpssql)
+    proxy_https_list=[row['ipport'] for row in proxy_https_dict]
+    print(proxy_https_list)

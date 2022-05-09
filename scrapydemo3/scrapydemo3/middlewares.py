@@ -8,6 +8,8 @@ from scrapy import signals
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
+from scrapydemo3.utils.MysqlConnectUtils import MysqlConnectUtils
+
 
 class Scrapydemo3SpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
@@ -55,7 +57,17 @@ class Scrapydemo3SpiderMiddleware:
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
+from fake_useragent import UserAgent
 
+http_sql = "select ipport  from ippools i where status='0' and httptype='http' order by checkingCount desc ,updateDate desc;"
+proxy_http_dict = MysqlConnectUtils().queryAll(http_sql)
+proxy_http_list = [row['ipport'] for row in proxy_http_dict]
+print(proxy_http_list)
+
+https_sql = "select ipport  from ippools i where status='0' and httptype='https' order by checkingCount desc ,updateDate desc;"
+proxy_https_dict = MysqlConnectUtils().queryAll(https_sql)
+proxy_https_list = [row['ipport'] for row in proxy_https_dict]
+print(proxy_https_list)
 class Scrapydemo3DownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
@@ -68,16 +80,24 @@ class Scrapydemo3DownloaderMiddleware:
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
-    def process_request(self, request, spider):
-        # Called for each request that goes through the downloader
-        # middleware.
 
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
+
+    def process_request(self, request, spider):
+        print("\n")
+        request.headers['User-Agent'] = UserAgent().random
+        print(f"我是请求request==========={request}")
+        print(f"我是请求request.body==========={request.body}")
+        print(f"我是请求request.headers==========={request.headers}")
+        print(f"我是请求request.url==========={request.url}")
+        print(f"我是请求request.method==========={request.method}")
+
+        if request.method=='POST':
+            if request.url.split(":")[0] == 'http':
+                request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+                print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
+            else:
+                request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
+                print(f"我是请求request proxy_https_list===={request.meta['proxy']}")
         return None
 
     def process_response(self, request, response, spider):
@@ -90,28 +110,20 @@ class Scrapydemo3DownloaderMiddleware:
         return response
 
     def process_exception(self, request, exception, spider):
-        # Called when a download handler or a process_request()
-        # (from other downloader middleware) raises an exception.
+        if request.url.split(":")[0]=='http':
+            request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+            print("proxy_http_list")
+        # else:
+        #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
+        #     print("proxy_https_list")
 
-        # Must either:
-        # - return None: continue processing this exception
-        # - return a Response object: stops process_exception() chain
-        # - return a Request object: stops process_exception() chain
         pass
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-from scrapydemo3.settings import PROXIES_LIST
-import random
 
-
-class process_request(object):
-    def process_request(self, request, spider):
-        request.meta['proxy'] = random.choice(PROXIES_LIST)
-        print(request.meta['proxy'])
-        pass
 
 
 

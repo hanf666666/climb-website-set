@@ -24,6 +24,7 @@ class IpPool:
         # 测试ip是否可用url
         self.test_url = 'http://httpbin.org/get'
         self.headers = {'User-Agent': UserAgent().random}
+        print(self.headers)
 
     def test_http_proxy(self, proxy):
         '''测试代理IP是否可用'''

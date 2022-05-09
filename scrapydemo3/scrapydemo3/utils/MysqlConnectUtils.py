@@ -42,5 +42,25 @@ class MysqlConnectUtils():
         cursor.execute(sql)
         self.conn.commit()
         cursor.close()
+
+    def queryone(self, sql):
+            # 连接数据库
+            # cursor=pymysql.cursors.DictCursor,是为了将数据作为一个字典返回
+            cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
+            # 使用cursor()方法获取操作游标
+            cursor.execute(sql)
+            result = cursor.fetchone()  # 获取
+            cursor.close()
+            return result
+
+    def queryAll(self, sql):
+            # 连接数据库
+            # cursor=pymysql.cursors.DictCursor,是为了将数据作为一个字典返回
+            cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
+            # 使用cursor()方法获取操作游标
+            cursor.execute(sql)
+            result = cursor.fetchall()  # 获取
+            cursor.close()
+            return result
     def close(self):
         self.conn.close()

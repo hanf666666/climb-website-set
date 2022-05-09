@@ -51,14 +51,13 @@ LOG_LEVEL='ERROR'
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-PROXIES_LIST = [
-    "http://218.6.173.81:443",
-    "http://218.75.102.198:8000",
-    "http://117.157.197.18:3128",
-]
+# PROXIES_LIST = [
+#     "http://218.6.173.81:443",
+#     "http://218.75.102.198:8000",
+#     "http://117.157.197.18:3128",
+# ]
 DOWNLOADER_MIDDLEWARES = {
    'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 543,
-   # 'scrapydemo3.middlewares.process_request': 1,
 
 }
 
