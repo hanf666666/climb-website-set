@@ -58,8 +58,8 @@ LOG_LEVEL='ERROR'
 # ]
 DOWNLOADER_MIDDLEWARES = {
 
-   # 'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 543,
-   'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 555,
+   'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 543,
+   # 'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 555,
    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 550,
 
 }
