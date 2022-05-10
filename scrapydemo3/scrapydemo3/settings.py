@@ -57,9 +57,15 @@ LOG_LEVEL='ERROR'
 #     "http://117.157.197.18:3128",
 # ]
 DOWNLOADER_MIDDLEWARES = {
-   'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 543,
+
+   # 'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 543,
+   'scrapydemo3.middlewares.Scrapydemo3DownloaderMiddleware': 555,
+   'scrapy.downloadermiddlewares.retry.RetryMiddleware': 550,
 
 }
+RETRY_ENABLED = True
+# 想重试几次就写几
+RETRY_TIMES = 100
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

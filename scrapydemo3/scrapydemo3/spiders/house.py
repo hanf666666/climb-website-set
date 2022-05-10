@@ -66,7 +66,7 @@ class HouseSpider(scrapy.Spider):
     def parse2(self, response):
 
         # print(type(response.text))
-        print(f"response.text==={response.text}")
+        # print(f"response.text==={response.text}")
         print(json.loads(response.text))
         pageDataList = json.loads(response.text)["d"]
 
@@ -98,9 +98,10 @@ class HouseSpider(scrapy.Spider):
         :return:
         """
         import json
-        print(f"response.text:{response.text}")
+        # print(f"response.text:{response.text}")
         parse_rooms = json.loads(response.text)["d"]
         print(f"response.meta.buildingid====>{response.meta['buildingid']}")
+        print(f"parse_rooms====>{len(parse_rooms)}个")
         projectname=response.meta['projectname']
         buildingid=response.meta['buildingid']
         enterprisename=response.meta['enterprisename']

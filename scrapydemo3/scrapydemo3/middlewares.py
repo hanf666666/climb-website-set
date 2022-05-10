@@ -61,7 +61,8 @@ class Scrapydemo3SpiderMiddleware:
 
 from fake_useragent import UserAgent
 
-http_sql = "select ipport  from ippools i where status='0' and httptype='http' order by checkingCount desc ,updateDate desc;"
+# http_sql = "select ipport  from ippools i where status='0'   and httptype='http' order by checkingCount desc ,updateDate desc;"
+http_sql = "select ipport  from ippools i where status='0' and highstatus='0' and httptype='http' order by checkingCount desc ,updateDate desc;"
 proxy_http_dict = MysqlConnectUtils().queryAll(http_sql)
 proxy_http_list = [row['ipport'] for row in proxy_http_dict]
 print(f"proxy_http_list====>{proxy_http_list}")
@@ -90,15 +91,15 @@ class Scrapydemo3DownloaderMiddleware:
 
         # 注意抓取控制频率
         # time.sleep(random.randint(1, 2))
-        print("\n")
+        # print("\n")
         # print(f"我是请求request==========={request}")
         # print(f"我是请求request.body==========={request.body}")
         # print(f"我是请求request.headers==========={request.headers}")
         # print(f"我是请求request.url==========={request.url}")
         # print(f"我是请求request.method==========={request.method}")
         if request.url.split(":")[0] == 'http':
-            # request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
-            request.meta['proxy'] = 'http://{}'.format('183.247.199.114:30001')
+            request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+            # request.meta['proxy'] = 'http://{}'.format('183.247.199.114:30001')
             # print(f"我是请求request proxy_http_list===>{request.meta['proxy']}")
 
 
@@ -128,7 +129,10 @@ class Scrapydemo3DownloaderMiddleware:
         #     request.meta['proxy'] = 'https://{}'.format(random.choice(proxy_https_list))
         #     print("proxy_https_list")
         print("process_exception=============================")
-        # return request
+        if request.url.split(":")[0] == 'http':
+            request.meta['proxy'] = 'http://{}'.format(random.choice(proxy_http_list))
+        time.sleep(1)
+        return request
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)

@@ -38,7 +38,7 @@ class IpPool:
         # proxies = {'协议': '协议://IP:端口号'}
         # timeout 超时设置 网页响应时间3秒 超过时间会抛出异常
         try:
-            resp = requests.get(url=self.test_url, proxies=proxies, headers=self.headers, timeout=3)
+            resp = requests.get(url=self.test_url, proxies=proxies, headers=self.headers, timeout=6)
             # 获取 状态码为200
             if resp.status_code == 200:
                 print("成功了!!!!!!")
