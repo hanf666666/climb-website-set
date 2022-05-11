@@ -32,7 +32,7 @@ class HouseSpider(scrapy.Spider):
         'Connection': 'keep-alive',
     }
     data = {"siteid": "",
-            "useType": "",
+            "useType": "1",
             "areaType": "",
             "projectname": "",
             "entName": "",
@@ -55,12 +55,12 @@ class HouseSpider(scrapy.Spider):
                                  headers=self.headers, )
 
     def parse1(self, response):
-        # for i in range(1, 2000*10, 10):
-        for i in range(1, 200*10, 10):
+        for i in range(1, 1500*10, 10):
+        # for i in range(1, 1500*10, 10):
         # for i in range(1, 11, 10):
             self.data["minrow"] = i
             self.data["maxrow"] = i + 10
-            print(f"正在爬取{i / 10}页")
+            print(f"正在爬取{int(i / 10)}页")
             yield scrapy.Request(url=self.start_urls[0], callback=self.parse2, body=json.dumps(self.data),
                                  method='POST', headers=self.headers, )
 
@@ -100,16 +100,18 @@ class HouseSpider(scrapy.Spider):
         """
         import json
         # print(f"response.text:{response.text}")
-        parse_rooms = json.loads(response.text)["d"]
+        roomsstr = json.loads(response.text)["d"]
+        rooms_json = json.loads(roomsstr)
         print(f"response.meta.buildingid====>{response.meta['buildingid']}")
-        print(f"parse_rooms====>{len(parse_rooms)}个")
+        print(f"response.meta.projectname====>{response.meta['projectname']}")
+        print(f"parse_rooms====>{len(rooms_json)}个")
         projectname=response.meta['projectname']
         buildingid=response.meta['buildingid']
         enterprisename=response.meta['enterprisename']
         location=response.meta['location']
         # print(f"parse_rooms=====>{parse_rooms}")
 
-        for json in json.loads(parse_rooms):
+        for json in rooms_json:
             # print(f"jsonjsonjsonjsonjson==>{type(json)}")
             # print(f"jsonjsonjsonjsonjson==>{json}")
             # print(f"jsonjsonjsonjsonjson==>{type(json['rooms'])}")
