@@ -40,7 +40,7 @@ class HouseSpider(scrapy.Spider):
             "minrow": "1",
             "maxrow": "11"}
     parse_list = []
-
+    pagecount = 0
     def start_requests(self):
         if not self.start_urls and hasattr(self, 'start_url'):
             raise AttributeError(
@@ -61,14 +61,22 @@ class HouseSpider(scrapy.Spider):
             self.data["minrow"] = i
             self.data["maxrow"] = i + 10
             print(f"正在爬取{int(i / 10)}页")
+            metaInfo = {
+                'crawlpage': int(i / 10)
+            }
             yield scrapy.Request(url=self.start_urls[0], callback=self.parse2, body=json.dumps(self.data),
-                                 method='POST', headers=self.headers, )
+                                 method='POST', headers=self.headers,meta=metaInfo )
+
 
     def parse2(self, response):
 
         # print(type(response.text))
         # print(f"response.text==={response.text}")
+        # print(json.loads(response.text))
         print(json.loads(response.text))
+        print(f"response.meta.crawlpage====>正在爬取{response.meta['crawlpage']}页")
+        self.pagecount = self.pagecount + 1
+        print(f"总共 ====>总共爬取{self.pagecount}页")
         pageDataList = json.loads(response.text)["d"]
 
         for row in json.loads(pageDataList):
