@@ -23,7 +23,7 @@ class IpPool:
     def __init__(self):
         # 测试ip是否可用url
         self.test_url = 'http://httpbin.org/get'
-        self.headers = {'User-Agent': UserAgent().random}
+        self.headers = {'User-Agent': UserAgent(path="D:/pyspace/hanpyspace/climb-website-set/simpledemo/data/fakeuseragent.json").random}
         print(self.headers)
 
     def test_http_proxy(self, proxy):

@@ -55,9 +55,9 @@ class HouseSpider(scrapy.Spider):
                                  headers=self.headers, )
 
     def parse1(self, response):
-        for i in range(1, 1500*10, 10):
+        # for i in range(1, 1300*10, 10):
         # for i in range(1, 1500*10, 10):
-        # for i in range(1, 11, 10):
+        for i in range(1, 11, 10):
             self.data["minrow"] = i
             self.data["maxrow"] = i + 10
             print(f"正在爬取{int(i / 10)}页")

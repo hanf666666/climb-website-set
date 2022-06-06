@@ -24,7 +24,7 @@ class IpPool:
         # 测试ip是否可用url
         # self.test_url = 'http://httpbin.org/get'
         self.test_url = 'http://47.95.216.113:8888/getIpAddr'
-        self.headers = {'User-Agent': UserAgent().random}
+        self.headers = {'User-Agent': UserAgent(path="D:/pyspace/hanpyspace/climb-website-set/simpledemo/data/fakeuseragent.json").random}
         print(self.headers)
 
     def test_http_proxy(self, proxy):

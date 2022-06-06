@@ -86,7 +86,7 @@ class Scrapydemo3DownloaderMiddleware:
 
 
     def process_request(self, request, spider):
-        request.headers['User-Agent'] = UserAgent().random
+        request.headers['User-Agent'] = UserAgent(path="D:/pyspace/hanpyspace/climb-website-set/scrapydemo3/data/fakeuseragent.json").random
 
 
         # 注意抓取控制频率

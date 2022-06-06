@@ -25,7 +25,7 @@ class IpPool:
         self.test_url = 'http://httpbin.org/get'
         # 获取IP的 目标url
         self.url = 'https://www.89ip.cn/index_{}.html'
-        self.headers = {'User-Agent': UserAgent().random}
+        self.headers = {'User-Agent': UserAgent(path="D:/pyspace/hanpyspace/climb-website-set/simpledemo/data/fakeuseragent.json").random}
 
     def get_html(self, url):
         '''获取页面'''
