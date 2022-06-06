@@ -35,13 +35,23 @@ class MysqlConnectUtils():
         print(result)
 
     def inserttest(self, sql):
-        # 连接数据库
-        # cursor=pymysql.cursors.DictCursor,是为了将数据作为一个字典返回
-        cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
-        # 使用cursor()方法获取操作游标
-        cursor.execute(sql)
-        self.conn.commit()
-        cursor.close()
+        cursor=None
+        try:
+            # 连接数据库
+            # cursor=pymysql.cursors.DictCursor,是为了将数据作为一个字典返回
+            cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
+            # 使用cursor()方法获取操作游标
+            cursor.execute(sql)
+            self.conn.commit()
+
+        except Exception as r:
+            print(f"报错sql====>{sql}")
+            print('未知错误===> %s' % (r))
+        finally:
+            if cursor is not None:
+                cursor.close()
+
+
 
     def queryone(self, sql):
             # 连接数据库
