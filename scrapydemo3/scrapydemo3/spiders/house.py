@@ -69,36 +69,38 @@ class HouseSpider(scrapy.Spider):
 
 
     def parse2(self, response):
+        try:
+            # print(type(response.text))
+            # print(f"response.text==={response.text}")
+            # print(json.loads(response.text))
+            print(json.loads(response.text))
+            print(f"response.meta.crawlpage====>正在爬取{response.meta['crawlpage']}页")
+            self.pagecount = self.pagecount + 1
+            print(f"总共 ====>总共爬取{self.pagecount}页")
+            pageDataList = json.loads(response.text)["d"]
 
-        # print(type(response.text))
-        # print(f"response.text==={response.text}")
-        # print(json.loads(response.text))
-        print(json.loads(response.text))
-        print(f"response.meta.crawlpage====>正在爬取{response.meta['crawlpage']}页")
-        self.pagecount = self.pagecount + 1
-        print(f"总共 ====>总共爬取{self.pagecount}页")
-        pageDataList = json.loads(response.text)["d"]
-
-        for row in json.loads(pageDataList):
-            # print(f"row===>{row}")
-            projectname = row["projectname"]
-            enterprisename = row["enterprisename"]
-            blockname = row["blockname"]
-            location = row["location"]
-            getRoomJsonhttp = "http://www.cq315house.com/WebService/WebFormService.aspx/GetRoomJson"
-            buildingids = row["buildingid"]
-            for buildingid in buildingids.split(','):
-                getRoomJsonBody = {
-                    "buildingid": buildingid
-                }
-                metaInfo={
-                    'projectname': projectname,
-                    'buildingid': buildingid,
-                    'enterprisename': enterprisename,
-                    'location': location,
-                }
-                yield scrapy.Request(url=getRoomJsonhttp, callback=self.parse_rooms, body=json.dumps(getRoomJsonBody),
-                                     method='POST', headers=self.headers, meta=metaInfo)
+            for row in json.loads(pageDataList):
+                # print(f"row===>{row}")
+                projectname = row["projectname"]
+                enterprisename = row["enterprisename"]
+                blockname = row["blockname"]
+                location = row["location"]
+                getRoomJsonhttp = "http://www.cq315house.com/WebService/WebFormService.aspx/GetRoomJson"
+                buildingids = row["buildingid"]
+                for buildingid in buildingids.split(','):
+                    getRoomJsonBody = {
+                        "buildingid": buildingid
+                    }
+                    metaInfo={
+                        'projectname': projectname,
+                        'buildingid': buildingid,
+                        'enterprisename': enterprisename,
+                        'location': location,
+                    }
+                    yield scrapy.Request(url=getRoomJsonhttp, callback=self.parse_rooms, body=json.dumps(getRoomJsonBody),
+                                         method='POST', headers=self.headers, meta=metaInfo)
+        except:
+            print(f"response.text======>{response.text}")
 
     def parse_rooms(self, response):
         """
@@ -107,48 +109,50 @@ class HouseSpider(scrapy.Spider):
         :return:
         """
         import json
-        # print(f"response.text:{response.text}")
-        roomsstr = json.loads(response.text)["d"]
-        rooms_json = json.loads(roomsstr)
-        print(f"response.meta.buildingid====>{response.meta['buildingid']}")
-        print(f"response.meta.projectname====>{response.meta['projectname']}")
-        print(f"parse_rooms====>{len(rooms_json)}个")
-        projectname=response.meta['projectname']
-        buildingid=response.meta['buildingid']
-        enterprisename=response.meta['enterprisename']
-        location=response.meta['location']
-        # print(f"parse_rooms=====>{parse_rooms}")
+        try:
+            # print(f"response.text:{response.text}")
+            roomsstr = json.loads(response.text)["d"]
+            rooms_json = json.loads(roomsstr)
+            print(f"response.meta.buildingid====>{response.meta['buildingid']}")
+            print(f"response.meta.projectname====>{response.meta['projectname']}")
+            print(f"parse_rooms====>{len(rooms_json)}个")
+            projectname = response.meta['projectname']
+            buildingid = response.meta['buildingid']
+            enterprisename = response.meta['enterprisename']
+            location = response.meta['location']
+            # print(f"parse_rooms=====>{parse_rooms}")
 
-        for json in rooms_json:
-            # print(f"jsonjsonjsonjsonjson==>{type(json)}")
-            # print(f"jsonjsonjsonjsonjson==>{json}")
-            # print(f"jsonjsonjsonjsonjson==>{type(json['rooms'])}")
-            for room in json['rooms']:
-                # print(f'{room["location"]}===>{room["flr"]} =>{room["rn"]}====>{room["tag"]}===>{room["nsjg"]}')
-                # print(f'{room["id"]}')
-                # print(f'{room["fjh"]}')
-                # print(f'{room["roomstatus"]}')
-                # print(f'room的相关信息{type(room)}')
-                # print(f'room的相关信息{room["id"]}')
-                roomDetailsItem = RoomDetailsItem()
+            for json in rooms_json:
+                # print(f"jsonjsonjsonjsonjson==>{type(json)}")
+                # print(f"jsonjsonjsonjsonjson==>{json}")
+                # print(f"jsonjsonjsonjsonjson==>{type(json['rooms'])}")
+                for room in json['rooms']:
+                    # print(f'{room["location"]}===>{room["flr"]} =>{room["rn"]}====>{room["tag"]}===>{room["nsjg"]}')
+                    # print(f'{room["id"]}')
+                    # print(f'{room["fjh"]}')
+                    # print(f'{room["roomstatus"]}')
+                    # print(f'room的相关信息{type(room)}')
+                    # print(f'room的相关信息{room["id"]}')
+                    roomDetailsItem = RoomDetailsItem()
 
-                # use":"成套住宅\
-                if room['use'] in ['成套住宅', '住宅']:
-                    roomDetailsItem['projectname']= projectname
-                    roomDetailsItem['buildingid']= buildingid
-                    roomDetailsItem['enterprisename']= enterprisename
-                    roomDetailsItem['locationfu']= location
+                    # use":"成套住宅\
+                    if room['use'] in ['成套住宅', '住宅']:
+                        roomDetailsItem['projectname'] = projectname
+                        roomDetailsItem['buildingid'] = buildingid
+                        roomDetailsItem['enterprisename'] = enterprisename
+                        roomDetailsItem['locationfu'] = location
 
+                        # {'认购', '网签', '现房'}
+                        # 唯一号
+                        roomDetailsItem["fjh"] = room["fjh"]
+                        roomDetailsItem["downloadDate"] = datetime.now()
+                        roomDetailsItem["roomstatus"] = room["roomstatus"]
+                        roomDetailsItem["use"] = room["use"]
+                        roomDetailsItem["locationzi"] = room["location"]
+                        roomDetailsItem["nsjg"] = room["nsjg"]
 
-                    # {'认购', '网签', '现房'}
-                    # 唯一号
-                    roomDetailsItem["fjh"] = room["fjh"]
-                    roomDetailsItem["downloadDate"] = datetime.now()
-                    roomDetailsItem["roomstatus"] = room["roomstatus"]
-                    roomDetailsItem["use"] = room["use"]
-                    roomDetailsItem["locationzi"] = room["location"]
-                    roomDetailsItem["nsjg"] = room["nsjg"]
-
-                    # print(f"=roomDetailsItem==>===================================={roomDetailsItem}")
-                    # sleep(10)
-                    yield roomDetailsItem
+                        # print(f"=roomDetailsItem==>===================================={roomDetailsItem}")
+                        # sleep(10)
+                        yield roomDetailsItem
+        except:
+            print(f"response.text的数据:{response.text}")
